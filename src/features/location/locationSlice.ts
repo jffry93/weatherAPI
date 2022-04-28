@@ -12,10 +12,10 @@ const locationSlice = createSlice({
   name: 'location',
   initialState,
   reducers: {
-    isReal: (state): any => {
+    isReal: (state) => {
       state.real = true;
     },
-    notReal: (state): any => {
+    notReal: (state) => {
       state.real = false;
     },
   },
