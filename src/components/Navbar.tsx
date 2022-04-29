@@ -1,7 +1,7 @@
 import { BsSearch } from 'react-icons/bs';
 import styled from 'styled-components';
 
-const Navbar = ({ setCity }) => {
+const Navbar = ({ setCity }: any) => {
   const updateCity = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);

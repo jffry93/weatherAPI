@@ -2,16 +2,20 @@ import React, { useState, useEffect, SetStateAction, FC } from 'react';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 //STYLING
 import styled from 'styled-components';
+//REDUCERS
+import { handleDate } from './features/date/date-slice';
+import { incremented } from './features/counter/counter-slice';
 //WEATHER API
 import {
   useFetchCurrentQuery,
-  useFetchHistoryQuery,
+  useFetchYesterdayQuery,
+  useFetchTomorrowQuery,
 } from './features/weather/Weather-Api-slice';
 //STYLING
 import './App.css';
 //COMPONENTS
 import Current from './components/Current';
-import History from './components/History';
+import Yesterday from './components/Yesterday';
 import Navbar from './components/Navbar';
 
 function App() {
@@ -19,23 +23,25 @@ function App() {
   const count: number = useAppSelector((state) => state.counter.value);
   //LOCATION STATE
   const real: boolean = useAppSelector((state) => state.location.real);
+  //DATE STATE
+  const date: string = useAppSelector((state) => state.dateReducer.date);
+
   const dispatch: object = useAppDispatch();
   //states
-  const [city, setCity] = useState('Toronto');
+  const [city, setCity] = useState('');
   //fetch API data
   const { data: currentData, error, isFetching } = useFetchCurrentQuery(city);
-  const { data: historyData } = useFetchHistoryQuery(city);
-  //CHART
-  const hours = historyData?.forecast.forecastday[0].hour;
+  const { data: yesterdayData } = useFetchYesterdayQuery(city);
+  const { data: tomorrowData } = useFetchTomorrowQuery(city);
 
   useEffect(() => {
-    console.log(hours);
-  }, [historyData]);
+    console.log(date);
+  }, [date]);
 
-  interface cityType {
-    preventDefault: () => void;
-    target: { value: SetStateAction<string> }[];
-  }
+  // interface cityType {
+  //   preventDefault: () => void;
+  //   target: { value: SetStateAction<string> }[];
+  // }
 
   //DISPLAY CITY ENTERED IN INPUT
   const updateCity = (e: React.FormEvent<HTMLFormElement>) => {
@@ -46,21 +52,54 @@ function App() {
     setCity(location);
   };
 
+  const handleClick = (string) => {
+    dispatch(handleDate(string));
+  };
+
   return (
     <div className='App-header'>
       <Navbar setCity={setCity} />
       {!real && <p>Enter Valid Location</p>}
       <StyledDateNav>
-        <button>Yesterday</button>
-        <button className='active'>Today</button>
-        <button>Tomorrow</button>
+        <button
+          onClick={() => handleClick('yesterday')}
+          className={date === 'yesterday' ? 'active' : ''}
+        >
+          Yesterday
+        </button>
+        <button
+          onClick={() => handleClick('today')}
+          className={date === 'today' ? 'active' : ''}
+        >
+          Today
+        </button>
+        <button
+          onClick={() => handleClick('tomorrow')}
+          className={date === 'tomorrow' ? 'active' : ''}
+        >
+          Tomorrow
+        </button>
       </StyledDateNav>
 
       {currentData && (
-        <StyledInformationDisplayed>
-          <Current data={currentData} />
-          {/* <History hours={hours} /> */}
-        </StyledInformationDisplayed>
+        <>
+          <StyledInformationDisplayed>
+            {date === 'yesterday' ? (
+              <Yesterday yesterdayData={yesterdayData} />
+            ) : (
+              ''
+            )}
+            {date === 'today' ? <Current data={currentData} /> : ''}
+            {date === 'tomorrow' ? (
+              <Yesterday yesterdayData={tomorrowData} />
+            ) : (
+              ''
+            )}
+          </StyledInformationDisplayed>
+          <StyledMoreDetail>
+            <button>More Details</button>
+          </StyledMoreDetail>
+        </>
       )}
     </div>
   );
@@ -91,6 +130,15 @@ const StyledInformationDisplayed = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
+`;
+const StyledMoreDetail = styled.div`
+  button {
+    background-color: #fca426;
+    padding: 8px 32px;
+    border-radius: 3px;
+    width: fit-content;
+    box-shadow: 0px 2px 60px 5px rgba(252, 164, 38, 0.1);
+  }
 `;
 
 export default App;

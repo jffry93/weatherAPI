@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 //icons
-import { FaWater, FaWeightHanging } from 'react-icons/fa';
-import { BsFillSunFill } from 'react-icons/bs';
+import { FaWater } from 'react-icons/fa';
+import { BsFillSunFill, BsFillCloudRainFill } from 'react-icons/bs';
 import { RiWindyFill } from 'react-icons/ri';
 
-const CurrentDetails = ({ data }) => {
+const YesterdayDetails = ({ yesterdayData }) => {
   return (
     <StyledCurrentDetails>
       <h4>Details</h4>
@@ -15,7 +15,7 @@ const CurrentDetails = ({ data }) => {
             <FaWater />
             <p>Humidity</p>
           </div>
-          <h4>{data.current.humidity}%</h4>
+          <h4>{yesterdayData?.forecast.forecastday[0].day.avghumidity}%</h4>
         </div>
         <div className='uv-index card'>
           <div className='line'></div>
@@ -24,7 +24,7 @@ const CurrentDetails = ({ data }) => {
             <p>UV index</p>
           </div>
 
-          <h4>{data.current.uv}</h4>
+          <h4>{yesterdayData?.forecast.forecastday[0].day.uv}</h4>
         </div>
         <div className='wind card'>
           <div className='line'></div>
@@ -32,15 +32,17 @@ const CurrentDetails = ({ data }) => {
             <RiWindyFill />
             <p>Wind</p>
           </div>
-          <h4>{data.current.wind_kph} km/h</h4>
+          <h4>{yesterdayData?.forecast.forecastday[0].day.maxwind_kph} km/h</h4>
         </div>
         <div className='pressure card'>
           <div className='line'></div>
           <div className='icon-container'>
-            <FaWeightHanging />
-            <p>Pressure</p>
+            <BsFillCloudRainFill />
+            <p>Preciptation</p>
           </div>
-          <h4>{data.current.pressure_mb} mbar</h4>
+          <h4>
+            {yesterdayData?.forecast.forecastday[0].day.totalprecip_in} inch
+          </h4>
         </div>
       </div>
     </StyledCurrentDetails>
@@ -137,4 +139,4 @@ const StyledCurrentDetails = styled.div`
   }
 `;
 
-export default CurrentDetails;
+export default YesterdayDetails;
