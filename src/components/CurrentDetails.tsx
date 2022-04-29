@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 //icons
 import { FaWater, FaWeightHanging } from 'react-icons/fa';
@@ -141,7 +140,7 @@ const StyledCurrentDetails = styled.div`
   }
   button {
     margin-top: 32px;
-    font-size: 18px;
+    background-color: #fca426;
     padding: 8px 32px;
     border-radius: 3px;
     width: fit-content;

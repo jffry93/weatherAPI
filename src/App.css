@@ -58,6 +58,6 @@ p {
 button {
   border: none;
   color: white;
-  background-color: #fca426;
-  font-size: calc(10px + 2vmin);
+  background-color: transparent;
+  font-size: 18px;
 }

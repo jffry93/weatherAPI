@@ -12,6 +12,7 @@ import './App.css';
 //COMPONENTS
 import Current from './components/Current';
 import History from './components/History';
+import Navbar from './components/Navbar';
 
 function App() {
   //COUNTER STATE
@@ -20,7 +21,7 @@ function App() {
   const real: boolean = useAppSelector((state) => state.location.real);
   const dispatch: object = useAppDispatch();
   //states
-  const [city, setCity] = useState('TORONTO');
+  const [city, setCity] = useState('Toronto');
   //fetch API data
   const { data: currentData, error, isFetching } = useFetchCurrentQuery(city);
   const { data: historyData } = useFetchHistoryQuery(city);
@@ -46,24 +47,44 @@ function App() {
   };
 
   return (
-    <div className='App'>
-      <header className='App-header'>
-        {!real && <p>Enter Valid Location</p>}
-        <form action='' onSubmit={updateCity}>
-          <input name='location' type='text' placeholder='City or PostalCode' />{' '}
-          <input type='submit' value='Submit' />
-        </form>
-        {currentData && (
-          <StyledInformationDisplayed>
-            <Current data={currentData} />
-            {/* <History hours={hours} /> */}
-          </StyledInformationDisplayed>
-        )}
-      </header>
-      <div></div>
+    <div className='App-header'>
+      <Navbar setCity={setCity} />
+      {!real && <p>Enter Valid Location</p>}
+      <StyledDateNav>
+        <button>Yesterday</button>
+        <button className='active'>Today</button>
+        <button>Tomorrow</button>
+      </StyledDateNav>
+
+      {currentData && (
+        <StyledInformationDisplayed>
+          <Current data={currentData} />
+          {/* <History hours={hours} /> */}
+        </StyledInformationDisplayed>
+      )}
     </div>
   );
 }
+const StyledDateNav = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: calc(100% - 22px);
+  max-width: 500px;
+  background-color: #343842;
+  border-radius: 3px;
+  margin-top: 16px;
+  button {
+    /* border: 1px solid red; */
+    width: 100%;
+    padding: 8px 16px;
+    border-radius: 3px;
+  }
+  .active {
+    background-color: #fca426;
+  }
+`;
 
 const StyledInformationDisplayed = styled.div`
   display: flex;
