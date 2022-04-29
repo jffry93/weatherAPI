@@ -1,4 +1,4 @@
-import { useState, useEffect, SetStateAction } from 'react';
+import React, { useState, useEffect, SetStateAction } from 'react';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { incremented, amountAdded } from './features/counter/counter-slice';
 
@@ -14,9 +14,9 @@ function App() {
   const real: boolean = useAppSelector((state) => state.location.real);
   const dispatch: object = useAppDispatch();
   //states
-  const [location, setCity] = useState('');
+  const [city, setCity] = useState('');
   //fetch API data
-  const { data, error, isFetching } = useFetchCurrentQuery(location);
+  const { data, error, isFetching } = useFetchCurrentQuery(city);
 
   useEffect(() => {
     // console.log(real);
@@ -27,25 +27,21 @@ function App() {
     target: { value: SetStateAction<string> }[];
   }
 
-  const updateCity = (e: cityType) => {
+  const updateCity = (e: React.FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(e.currentTarget);
+    // console.log(formData.entries());
     e.preventDefault();
-    setCity(e.target[0].value);
+    const [_, location] = formData.entries().next().value;
+    console.log(location);
+    setCity(location);
   };
-
-  // const handlePlusTen = () => {
-  //   dispatch(amountAdded(10));
-  // };
-
-  // const handleIncrement = () => {
-  //   dispatch(incremented());
-  // };
 
   return (
     <div className='App'>
       <header className='App-header'>
         {!real && <p>Enter Valid Location</p>}
-        <form action='' onSubmit={() => updateCity}>
-          <input type='text' placeholder='City or PostalCode' />{' '}
+        <form action='' onSubmit={updateCity}>
+          <input name='location' type='text' placeholder='City or PostalCode' />{' '}
           <input type='submit' value='Submit' />
         </form>
         {data && (

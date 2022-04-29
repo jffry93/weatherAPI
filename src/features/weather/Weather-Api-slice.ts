@@ -21,12 +21,7 @@ interface Location {
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: await fetchBaseQuery({
-    baseUrl: 'http://api.weatherapi.com/v1',
-    prepareHeaders(headers) {
-      headers.set('x-api-key', WEATHER_API_KEY);
-
-      return headers;
-    },
+    baseUrl: 'https://api.weatherapi.com/v1',
   }),
   endpoints(builder) {
     return {
