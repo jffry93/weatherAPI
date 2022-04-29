@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+
 import counterReducer from '../features/counter/counter-slice';
 import locationReducer from '../features/location/locationSlice';
 import { apiSlice } from '../features/weather/Weather-Api-slice';

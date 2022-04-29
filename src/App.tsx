@@ -1,11 +1,17 @@
-import React, { useState, useEffect, SetStateAction } from 'react';
+import React, { useState, useEffect, SetStateAction, FC } from 'react';
 import { useAppDispatch, useAppSelector } from './app/hooks';
-import { incremented, amountAdded } from './features/counter/counter-slice';
-
+//STYLING
+import styled from 'styled-components';
 //WEATHER API
-import { useFetchCurrentQuery } from './features/weather/Weather-Api-slice';
-import logo from './logo.svg';
+import {
+  useFetchCurrentQuery,
+  useFetchHistoryQuery,
+} from './features/weather/Weather-Api-slice';
+//STYLING
 import './App.css';
+//COMPONENTS
+import Current from './components/Current';
+import History from './components/History';
 
 function App() {
   //COUNTER STATE
@@ -14,25 +20,28 @@ function App() {
   const real: boolean = useAppSelector((state) => state.location.real);
   const dispatch: object = useAppDispatch();
   //states
-  const [city, setCity] = useState('');
+  const [city, setCity] = useState('TORONTO');
   //fetch API data
-  const { data, error, isFetching } = useFetchCurrentQuery(city);
+  const { data: currentData, error, isFetching } = useFetchCurrentQuery(city);
+  const { data: historyData } = useFetchHistoryQuery(city);
+  //CHART
+  const hours = historyData?.forecast.forecastday[0].hour;
 
   useEffect(() => {
-    // console.log(real);
-  }, [real]);
+    console.log(hours);
+  }, [historyData]);
 
   interface cityType {
     preventDefault: () => void;
     target: { value: SetStateAction<string> }[];
   }
 
+  //DISPLAY CITY ENTERED IN INPUT
   const updateCity = (e: React.FormEvent<HTMLFormElement>) => {
-    const formData = new FormData(e.currentTarget);
-    // console.log(formData.entries());
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
     const [_, location] = formData.entries().next().value;
-    console.log(location);
+
     setCity(location);
   };
 
@@ -44,28 +53,23 @@ function App() {
           <input name='location' type='text' placeholder='City or PostalCode' />{' '}
           <input type='submit' value='Submit' />
         </form>
-        {data && (
-          <div>
-            <img src={data.current.condition.icon} alt='' />
-            <h2>
-              {data.current.temp_c} C / {data.current.temp_f} F
-            </h2>
-            <p>{data.location.name}</p>
-            <p>{data.location.country}</p>
-          </div>
+        {currentData && (
+          <StyledInformationDisplayed>
+            <Current data={currentData} />
+            {/* <History hours={hours} /> */}
+          </StyledInformationDisplayed>
         )}
-        {/* <p>
-          <button type='button' onClick={handleIncrement}>
-            count is: {count}
-          </button>
-          <button type='button' onClick={handlePlusTen}>
-            Count + 10: {count}
-          </button>
-        </p> */}
       </header>
       <div></div>
     </div>
   );
 }
+
+const StyledInformationDisplayed = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
 
 export default App;
