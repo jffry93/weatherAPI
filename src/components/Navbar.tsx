@@ -35,6 +35,7 @@ const StyledNavbar = styled.nav`
   padding: 16px 22px 16px 32px;
   max-width: 500px;
 
+  position: relative;
   form {
     display: flex;
     gap: 24px;
@@ -42,7 +43,7 @@ const StyledNavbar = styled.nav`
     width: 100%;
     max-width: 400px;
     margin: auto;
-
+    z-index: 3;
     input {
       width: 100%;
     }

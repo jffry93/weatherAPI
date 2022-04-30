@@ -12,8 +12,8 @@ const toggleSlice = createSlice({
   name: 'location',
   initialState,
   reducers: {
-    toggleState: (state, action: PayloadAction<boolean>) => {
-      state.show = !action.payload;
+    toggleState: (state) => {
+      state.show = !state.show;
     },
   },
 });

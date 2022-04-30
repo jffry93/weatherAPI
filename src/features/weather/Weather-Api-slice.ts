@@ -61,10 +61,10 @@ const getYesterdaysDate = () => {
 const yesterday = getYesterdaysDate();
 //TOMORROWS DATE
 const getTomorrowsDate = () => {
-  var currentDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
-  var day = currentDate.getDate();
-  var month = currentDate.getMonth() + 1;
-  var year = currentDate.getFullYear();
+  let currentDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+  let day = currentDate.getDate();
+  let month = currentDate.getMonth() + 1;
+  let year = currentDate.getFullYear();
   return `${year}-${month}-${day}`;
 };
 const tomorrow = getTomorrowsDate();

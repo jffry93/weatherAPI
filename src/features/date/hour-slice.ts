@@ -3,11 +3,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface hourState {
   index: number;
   updatedArray: [];
+  nextTwentyFour: [];
 }
 
 const initialState: hourState = {
   index: 0,
   updatedArray: [],
+  nextTwentyFour: [],
 };
 
 const hourSlice = createSlice({
@@ -20,9 +22,12 @@ const hourSlice = createSlice({
     handleArray(state, action: PayloadAction<[]>) {
       state.updatedArray = action.payload;
     },
+    handleTwentyFour(state, action: PayloadAction<[]>) {
+      state.nextTwentyFour = action.payload.splice(state.index, 24);
+    },
   },
 });
 
-export const { handleIndex, handleArray } = hourSlice.actions;
+export const { handleIndex, handleArray, handleTwentyFour } = hourSlice.actions;
 
 export default hourSlice.reducer;
