@@ -8,7 +8,7 @@ const initialState: locationState = {
   real: true,
 };
 
-const locationSlice = createSlice({
+const realSlice = createSlice({
   name: 'location',
   initialState,
   reducers: {
@@ -21,6 +21,6 @@ const locationSlice = createSlice({
   },
 });
 
-export const { isReal, notReal } = locationSlice.actions;
+export const { isReal, notReal } = realSlice.actions;
 
-export default locationSlice.reducer;
+export default realSlice.reducer;

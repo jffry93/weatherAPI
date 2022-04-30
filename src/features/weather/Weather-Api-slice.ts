@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { isReal, notReal } from '../location/locationSlice';
+import { isReal, notReal } from '../location/real-place-slice';
 
 const WEATHER_API_KEY: string = '2049db5f99ef405eb86151912211611';
 
@@ -22,6 +22,7 @@ interface Current {
   };
 }
 interface Hour {
+  time: string | number | Date;
   temp_c: number;
 }
 
@@ -69,12 +70,15 @@ const getTomorrowsDate = () => {
 const tomorrow = getTomorrowsDate();
 
 //TODAYS DATE
-let today: any = new Date();
-let dd = String(today.getDate()).padStart(2, '0');
-let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-let yyyy = today.getFullYear();
+const getTodayDate = () => {
+  let today: any = new Date();
+  let dd = String(today.getDate()).padStart(2, '0');
+  let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  let yyyy = today.getFullYear();
 
-today = yyyy + '-' + mm + '-' + dd;
+  return yyyy + '-' + mm + '-' + dd;
+};
+const today = getTodayDate();
 
 export const apiSlice = createApi({
   reducerPath: 'api',
@@ -83,7 +87,7 @@ export const apiSlice = createApi({
   }),
   endpoints(builder) {
     return {
-      //TODAY
+      //CURRENT
       fetchCurrent: builder.query<Current, string | void>({
         query(location) {
           return `/current.json?key=${WEATHER_API_KEY}&q=${location}&aqi=no`;
@@ -124,6 +128,13 @@ export const apiSlice = createApi({
           }
         },
       }),
+      //TODAY
+      fetchToday: builder.query<History, string | void>({
+        query(location) {
+          return `/history.json?key=${WEATHER_API_KEY}&q=${location}&dt=${today}`;
+        },
+      }),
+
       //TOMORROW
       fetchTomorrow: builder.query<History, string | void>({
         query(location) {
@@ -144,6 +155,11 @@ export const apiSlice = createApi({
           }
         },
       }),
+      fetchThreeDays: builder.query<History, string | void>({
+        query(location) {
+          return `/forecast.json?key=${WEATHER_API_KEY}&q=${location}&days=7&aqi=no&alerts=no`;
+        },
+      }),
     };
   },
 });
@@ -151,5 +167,7 @@ export const apiSlice = createApi({
 export const {
   useFetchCurrentQuery,
   useFetchYesterdayQuery,
+  useFetchTodayQuery,
   useFetchTomorrowQuery,
+  useFetchThreeDaysQuery,
 } = apiSlice;

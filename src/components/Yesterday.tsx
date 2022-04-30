@@ -18,8 +18,8 @@ const Yesterday = ({ yesterdayData }) => {
           />
           <h3>{yesterdayData?.forecast.forecastday[0].day.condition.text}</h3>
         </div>
-        <YesterdayDetails yesterdayData={yesterdayData} />
       </div>
+      <YesterdayDetails yesterdayData={yesterdayData} />
       {/* {yesterday?.map((hour) => (
         <div>
           <p>{hour.temp_c}</p>

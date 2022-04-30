@@ -1,13 +1,18 @@
 import { BsSearch } from 'react-icons/bs';
 import styled from 'styled-components';
+//REDUX
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { selectedCity } from '../features/location/location-slice';
 
-const Navbar = ({ setCity }: any) => {
+const Navbar = () => {
+  const place: string = useAppSelector((state) => state.location.city);
+  const dispatch: object = useAppDispatch();
+
   const updateCity = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const [_, location] = formData.entries().next().value;
-
-    setCity(location);
+    dispatch(selectedCity(location));
   };
   return (
     <StyledNavbar>

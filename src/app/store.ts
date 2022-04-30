@@ -1,16 +1,22 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import counterReducer from '../features/counter/counter-slice';
-import locationReducer from '../features/location/locationSlice';
+import realReducer from '../features/location/real-place-slice';
+import locationReducer from '../features/location/location-slice';
 import { apiSlice } from '../features/weather/Weather-Api-slice';
 import dateReducer from '../features/date/date-slice';
+import hourReducer from '../features/date/hour-slice';
+import toggleReducer from '../features/toggle/toggle-slice';
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
+    real: realReducer,
     location: locationReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
-    dateReducer: dateReducer,
+    date: dateReducer,
+    hour: hourReducer,
+    toggle: toggleReducer,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat(apiSlice.middleware);

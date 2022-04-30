@@ -4,11 +4,13 @@ import { useAppDispatch, useAppSelector } from './app/hooks';
 import styled from 'styled-components';
 //REDUCERS
 import { handleDate } from './features/date/date-slice';
-import { incremented } from './features/counter/counter-slice';
+import { handleIndex, handleArray } from './features/date/hour-slice';
+import { toggleState } from './features/toggle/toggle-slice';
 //WEATHER API
 import {
   useFetchCurrentQuery,
   useFetchYesterdayQuery,
+  useFetchTodayQuery,
   useFetchTomorrowQuery,
 } from './features/weather/Weather-Api-slice';
 //STYLING
@@ -17,48 +19,69 @@ import './App.css';
 import Current from './components/Current';
 import Yesterday from './components/Yesterday';
 import Navbar from './components/Navbar';
+import MoreDetails from './components/MoreDetails';
 
 function App() {
   //COUNTER STATE
   const count: number = useAppSelector((state) => state.counter.value);
   //LOCATION STATE
-  const real: boolean = useAppSelector((state) => state.location.real);
+  const real: boolean = useAppSelector((state) => state.real.real);
+  const place: string = useAppSelector((state) => state.location.city);
   //DATE STATE
-  const date: string = useAppSelector((state) => state.dateReducer.date);
+  const date: string = useAppSelector((state) => state.date.date);
+  const hours: string = useAppSelector((state) => state.hour.hour);
+  //TOGGLE DETAILS STATE
+  const toggle: boolean = useAppSelector((state) => state.toggle.show);
 
   const dispatch: object = useAppDispatch();
   //states
-  const [city, setCity] = useState('');
+  // const [hourIndex, setHourIndex] = useState();
   //fetch API data
-  const { data: currentData, error, isFetching } = useFetchCurrentQuery(city);
-  const { data: yesterdayData } = useFetchYesterdayQuery(city);
-  const { data: tomorrowData } = useFetchTomorrowQuery(city);
+  const { data: currentData, error, isFetching } = useFetchCurrentQuery(place);
+  const { data: yesterdayData } = useFetchYesterdayQuery(place);
+  const { data: todayData } = useFetchTodayQuery(place);
+  const { data: tomorrowData } = useFetchTomorrowQuery(place);
 
-  useEffect(() => {
-    console.log(date);
-  }, [date]);
+  //NEXT 24 HOURS
+  const todayHours = todayData?.forecast.forecastday[0].hour;
+  const tomorrowHours = tomorrowData?.forecast.forecastday[0].hour;
+  const fourthEightHours = todayHours?.concat(tomorrowHours);
 
-  // interface cityType {
-  //   preventDefault: () => void;
-  //   target: { value: SetStateAction<string> }[];
-  // }
+  var currentDate = new Date(new Date());
 
-  //DISPLAY CITY ENTERED IN INPUT
-  const updateCity = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const [_, location] = formData.entries().next().value;
+  const getCurrentHour = (date) => {
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var hour = date.getHours();
 
-    setCity(location);
+    return `${year}-${month}-${day} ${hour}:00`;
   };
 
-  const handleClick = (string) => {
+  useEffect(() => {
+    const currentHour = getCurrentHour(currentDate);
+    const updatedState = {};
+
+    fourthEightHours?.forEach((el, i) => {
+      const tomorrowHours = getCurrentHour(new Date(el.time));
+      if (tomorrowHours === currentHour) {
+        dispatch(handleIndex(i));
+      }
+    });
+    dispatch(handleArray(fourthEightHours));
+  }, [tomorrowData]);
+
+  const handleClick = (string: string) => {
     dispatch(handleDate(string));
   };
 
+  const handleToggle = () => {
+    dispatch(toggleState(toggle));
+  };
+
   return (
-    <div className='App-header'>
-      <Navbar setCity={setCity} />
+    <StyledApp>
+      <Navbar />
       {!real && <p>Enter Valid Location</p>}
       <StyledDateNav>
         <button
@@ -96,14 +119,25 @@ function App() {
               ''
             )}
           </StyledInformationDisplayed>
-          <StyledMoreDetail>
+          <StyledMoreDetail onClick={() => handleToggle()}>
             <button>More Details</button>
           </StyledMoreDetail>
         </>
       )}
-    </div>
+      {toggle && <MoreDetails />}
+    </StyledApp>
   );
 }
+const StyledApp = styled.div`
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+`;
+
 const StyledDateNav = styled.div`
   display: flex;
   align-items: center;
@@ -122,6 +156,7 @@ const StyledDateNav = styled.div`
   }
   .active {
     background-color: #fca426;
+    box-shadow: 0px 2px 60px 5px rgba(252, 164, 38, 0.025);
   }
 `;
 
@@ -137,7 +172,7 @@ const StyledMoreDetail = styled.div`
     padding: 8px 32px;
     border-radius: 3px;
     width: fit-content;
-    box-shadow: 0px 2px 60px 5px rgba(252, 164, 38, 0.1);
+    box-shadow: 0px 2px 60px 5px rgba(252, 164, 38, 0.025);
   }
 `;
 
