@@ -29,7 +29,6 @@ function App() {
   const place: string = useAppSelector((state) => state.location.city);
   //DATE STATE
   const date: string = useAppSelector((state) => state.date.date);
-  const hours: string = useAppSelector((state) => state.hour.hour);
   //TOGGLE DETAILS STATE
   const toggle: boolean = useAppSelector((state) => state.toggle.show);
 
@@ -69,7 +68,7 @@ function App() {
       }
     });
     dispatch(handleArray(fourthEightHours));
-  }, [tomorrowData]);
+  }, [toggle, location]);
 
   const handleClick = (string: string) => {
     dispatch(handleDate(string));

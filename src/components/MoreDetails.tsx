@@ -2,7 +2,9 @@ import { useEffect } from 'react';
 
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
+//APIS
 import { useFetchThreeDaysQuery } from '../features/weather/Weather-Api-slice';
+//REDUCERS
 import { MdArrowBack } from 'react-icons/md';
 
 const MoreDetails = ({ city }: any) => {
@@ -10,11 +12,12 @@ const MoreDetails = ({ city }: any) => {
   const { data: forecastData } = useFetchThreeDaysQuery(place);
   const forecasts = forecastData?.forecast.forecastday;
 
-  const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'];
+  const weekday = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
+  const dispatch: object = useAppDispatch();
 
   useEffect(() => {
-    // console.log(twentyFourHours);
-  }, []);
+    console.log('hour');
+  }, [MoreDetails]);
 
   return (
     <StyledMoreDetails>
