@@ -3,8 +3,13 @@ import styled from 'styled-components';
 import { FaWater, FaWeightHanging } from 'react-icons/fa';
 import { BsFillSunFill } from 'react-icons/bs';
 import { RiWindyFill } from 'react-icons/ri';
+//REDUX
+import { useAppSelector } from '../app/hooks';
+import { useFetchCurrentQuery } from '../features/weather/Weather-Api-slice';
 
-const CurrentDetails = ({ data }) => {
+const CurrentDetails = () => {
+  const place: string = useAppSelector((state) => state.location.city);
+  const { data, error, isFetching } = useFetchCurrentQuery(place);
   return (
     <StyledCurrentDetails>
       <h4>Details</h4>
@@ -15,7 +20,7 @@ const CurrentDetails = ({ data }) => {
             <FaWater />
             <p>Humidity</p>
           </div>
-          <h4>{data.current.humidity}%</h4>
+          <h4>{data?.current.humidity}%</h4>
         </div>
         <div className='uv-index card'>
           <div className='line'></div>
@@ -24,7 +29,7 @@ const CurrentDetails = ({ data }) => {
             <p>UV index</p>
           </div>
 
-          <h4>{data.current.uv}</h4>
+          <h4>{data?.current.uv}</h4>
         </div>
         <div className='wind card'>
           <div className='line'></div>
@@ -32,7 +37,7 @@ const CurrentDetails = ({ data }) => {
             <RiWindyFill />
             <p>Wind</p>
           </div>
-          <h4>{data.current.wind_kph} km/h</h4>
+          <h4>{data?.current.wind_kph} km/h</h4>
         </div>
         <div className='pressure card'>
           <div className='line'></div>
@@ -40,7 +45,7 @@ const CurrentDetails = ({ data }) => {
             <FaWeightHanging />
             <p>Pressure</p>
           </div>
-          <h4>{data.current.pressure_mb} mbar</h4>
+          <h4>{data?.current.pressure_mb} mbar</h4>
         </div>
       </div>
     </StyledCurrentDetails>

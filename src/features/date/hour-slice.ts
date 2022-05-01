@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Hour } from '../weather/Weather-Api-slice';
 
-interface hourState {
+interface HourState {
   index: number;
-  updatedArray: [];
-  nextTwentyFour: [];
+  updatedArray: Hour[];
+  nextTwentyFour: Hour[];
 }
 
-const initialState: hourState = {
+const initialState: HourState = {
   index: 0,
   updatedArray: [],
   nextTwentyFour: [],
@@ -19,11 +20,12 @@ const hourSlice = createSlice({
     handleIndex(state, action: PayloadAction<number>) {
       state.index = action.payload;
     },
-    handleArray(state, action: PayloadAction<[]>) {
+    handleArray(state, action: PayloadAction<Hour[]>) {
       state.updatedArray = action.payload;
     },
-    handleTwentyFour(state, action: PayloadAction<[]>) {
+    handleTwentyFour(state, action: PayloadAction<Hour[]>) {
       state.nextTwentyFour = action.payload.splice(state.index, 24);
+      // console.log(typeof state.nextTwentyFour);
     },
   },
 });

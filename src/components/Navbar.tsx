@@ -6,7 +6,7 @@ import { selectedCity } from '../features/location/location-slice';
 
 const Navbar = () => {
   const place: string = useAppSelector((state) => state.location.city);
-  const dispatch: object = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const updateCity = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,12 +46,21 @@ const StyledNavbar = styled.nav`
     z-index: 3;
     input {
       width: 100%;
+      padding-left: 8px;
     }
     button {
       svg {
         height: 25px;
         width: 25px;
       }
+    }
+    button:hover {
+      cursor: pointer;
+      transform: scale(1.05);
+      /* transform: scale(1.02); */
+    }
+    button:active {
+      transform: scale(1);
     }
   }
 `;

@@ -1,22 +1,29 @@
 import styled from 'styled-components';
 import CurrentDetails from './CurrentDetails';
+//FETCH API
+import { useFetchCurrentQuery } from '../features/weather/Weather-Api-slice';
+//REDUX
+import { useAppSelector } from '../app/hooks';
 
-const Current = ({ data }) => {
+const Current: React.FC = () => {
+  const place: string = useAppSelector((state) => state.location.city);
+  const { data, error, isFetching } = useFetchCurrentQuery(place);
+
   return (
     <StyledCurrent>
       <div className='current-info'>
-        <h2>{data.location.name}</h2>
-        <h3>{data.location.country}</h3>
+        <h2>{data?.location.name}</h2>
+        <h3>{data?.location.country}</h3>
         <h1 className='temperature'>
-          {data.current.temp_c} °C {/* / {data.current.temp_f} °F */}
+          {data?.current.temp_c} °C {/* / {data.current.temp_f} °F */}
         </h1>
         <div className='container'>
-          <img src={data.current.condition.icon} alt='' />
-          <h3>{data.current.condition.text}</h3>
+          <img src={data?.current.condition.icon} alt='' />
+          <h3>{data?.current.condition.text}</h3>
         </div>
       </div>
 
-      <CurrentDetails data={data} />
+      <CurrentDetails />
     </StyledCurrent>
   );
 };

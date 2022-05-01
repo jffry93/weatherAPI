@@ -3,8 +3,29 @@ import styled from 'styled-components';
 import { FaWater } from 'react-icons/fa';
 import { BsFillSunFill, BsFillCloudRainFill } from 'react-icons/bs';
 import { RiWindyFill } from 'react-icons/ri';
+import React, { FC } from 'react';
+import { ForecastDay } from '../features/weather/Weather-Api-slice';
 
-const YesterdayDetails = ({ yesterdayData }) => {
+interface yesterdayInterface {
+  detailData: {
+    forecast: {
+      forecastday: ForecastDay[];
+    };
+  };
+}
+
+// interface ForecastDay {
+//   day: {
+//     avgtemp_c: number;
+//     avghumidity: number;
+//     uv: number;
+//     maxwind_kph: number;
+//     totalprecip_in: number;
+//   };
+// }
+
+const YesterdayDetails = ({ detailData }: yesterdayInterface): JSX.Element => {
+  console.log(detailData);
   return (
     <StyledCurrentDetails>
       <h4>Details</h4>
@@ -15,7 +36,7 @@ const YesterdayDetails = ({ yesterdayData }) => {
             <FaWater />
             <p>Humidity</p>
           </div>
-          <h4>{yesterdayData?.forecast.forecastday[0].day.avghumidity}%</h4>
+          <h4>{detailData?.forecast.forecastday[0].day.avghumidity}%</h4>
         </div>
         <div className='uv-index card'>
           <div className='line'></div>
@@ -23,8 +44,7 @@ const YesterdayDetails = ({ yesterdayData }) => {
             <BsFillSunFill />
             <p>UV index</p>
           </div>
-
-          <h4>{yesterdayData?.forecast.forecastday[0].day.uv}</h4>
+          <h4>{detailData?.forecast.forecastday[0].day.uv}</h4>
         </div>
         <div className='wind card'>
           <div className='line'></div>
@@ -32,7 +52,7 @@ const YesterdayDetails = ({ yesterdayData }) => {
             <RiWindyFill />
             <p>Wind</p>
           </div>
-          <h4>{yesterdayData?.forecast.forecastday[0].day.maxwind_kph} km/h</h4>
+          <h4>{detailData?.forecast.forecastday[0].day.maxwind_kph} km/h</h4>
         </div>
         <div className='pressure card'>
           <div className='line'></div>
@@ -40,9 +60,7 @@ const YesterdayDetails = ({ yesterdayData }) => {
             <BsFillCloudRainFill />
             <p>Preciptation</p>
           </div>
-          <h4>
-            {yesterdayData?.forecast.forecastday[0].day.totalprecip_in} inch
-          </h4>
+          <h4>{detailData?.forecast.forecastday[0].day.totalprecip_in} inch</h4>
         </div>
       </div>
     </StyledCurrentDetails>

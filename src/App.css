@@ -51,3 +51,11 @@ button {
   background-color: transparent;
   font-size: 18px;
 }
+button:hover {
+  cursor: pointer;
+  transform: scale(0.99);
+  /* transform: scale(1.02); */
+}
+button:active {
+  transform: scale(0.98);
+}

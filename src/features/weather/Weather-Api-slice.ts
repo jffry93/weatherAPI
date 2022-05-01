@@ -21,14 +21,16 @@ interface Current {
     country: string;
   };
 }
-interface Hour {
+export interface Hour {
   time: string | number | Date;
   temp_c: number;
 }
 
-interface ForecastDay {
+export interface ForecastDay {
+  date: string | number | Date;
   day: {
-    avgtemp_c: number;
+    avgtemp_c?: number;
+    maxtemp_c?: number;
     avghumidity: number;
     uv: number;
     maxwind_kph: number;
@@ -37,7 +39,9 @@ interface ForecastDay {
       text: string;
       icon: string;
     };
+    date: number;
   };
+
   hour: Hour[];
 }
 interface History {

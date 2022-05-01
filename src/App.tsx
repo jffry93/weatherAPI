@@ -16,6 +16,7 @@ import {
   useFetchYesterdayQuery,
   useFetchTodayQuery,
   useFetchTomorrowQuery,
+  ForecastDay,
 } from './features/weather/Weather-Api-slice';
 //STYLING
 import './App.css';
@@ -24,20 +25,18 @@ import Current from './components/Current';
 import Yesterday from './components/Yesterday';
 import Navbar from './components/Navbar';
 import MoreDetails from './components/MoreDetails';
+//INTERFACES
 
 function App() {
   //REDUX
-  const dispatch: object = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   //REDUX SLICES
   const count: number = useAppSelector((state) => state.counter.value);
   const real: boolean = useAppSelector((state) => state.real.real);
   const place: string = useAppSelector((state) => state.location.city);
   const date: string = useAppSelector((state) => state.date.date);
-  const currentTime: string = useAppSelector((state) => state.hour.index);
-  const twoDayArray: string = useAppSelector(
-    (state) => state.hour.updatedArray
-  );
+  const twoDayArray = useAppSelector((state) => state.hour.updatedArray);
   const toggle: boolean = useAppSelector((state) => state.toggle.show);
 
   //fetch API data
@@ -48,43 +47,58 @@ function App() {
 
   //---------NEXT 24 HOURS STATE----------
 
+  // interface Hour {
+  //   hour?: {
+  //     time: string;
+  //   };
+  // }
   //SET 48 HOURS
-  const todayHours = todayData?.forecast.forecastday[0].hour;
-  const tomorrowHours = tomorrowData?.forecast.forecastday[0].hour;
+  const todayHours = todayData?.forecast.forecastday[0].hour || [];
+  const tomorrowHours = tomorrowData?.forecast.forecastday[0].hour || [];
   const fourEightHours = todayHours?.concat(tomorrowHours);
 
   //GET CURRENT DATE & TIME
   let currentDate = new Date(new Date());
 
   //FUNCTION TO CREATE EXACT MATCH OF API VALUE
-  const getCurrentHour = (date) => {
+  interface DateInterface {
+    getDate(): number;
+    getMonth(): number;
+    getFullYear(): number;
+    getHours(): number;
+  }
+
+  const getCurrentHour = (date: DateInterface): string => {
     let day = date.getDate();
+    let formattedDay = ('0' + day).slice(-2);
     let month = date.getMonth() + 1;
-    let formattedNumber = ('0' + month).slice(-2);
+    let formattedMonth = ('0' + month).slice(-2);
     let year = date.getFullYear();
     let hour = date.getHours();
 
-    return `${year}-${formattedNumber}-${day} ${hour}:00`;
+    return `${year}-${formattedMonth}-${formattedDay} ${hour}:00`;
   };
 
   //FIND CURRENT TIME IN ARRAY 48HOURS ARRAY
   useEffect(() => {
     const currentHour = getCurrentHour(currentDate);
 
-    fourEightHours?.forEach((el, i) => {
+    fourEightHours.forEach((el, i) => {
       if (el.time === currentHour) {
         dispatch(handleIndex(i));
+        console.log(el.time);
+        console.log(currentHour);
         dispatch(handleArray(fourEightHours));
       }
     });
     //MUST WAIT FOR TOMORROW HOURS DATA TO RUN ON TIME
-  }, [tomorrowHours]);
+  }, [JSON.stringify(tomorrowHours)]);
 
   //SET NEXT 24 HOURS ARRAY
   useEffect(() => {
     let reducerCopy = [...twoDayArray]; //CREATE CLONE OF ARRAY
     dispatch(handleTwentyFour(reducerCopy));
-  }, [twoDayArray]); //RUNS EVERYTIME THE LOCATION CHANGES
+  }, [JSON.stringify(twoDayArray)]); //RUNS EVERYTIME THE LOCATION CHANGES
 
   //CONDITIONAL RENDERS FOR DIFFERENT DAYS
   const handleClick = (string: string) => {
@@ -100,7 +114,9 @@ function App() {
     <StyledApp>
       <Navbar />
       {!real && <p className='invalid-address'>Enter Valid Location</p>}
-
+      <div className='detail-parent'>
+        <MoreDetails />
+      </div>
       {currentData && (
         <div className={`${toggle ? '' : 'active'} current-details`}>
           <StyledDateNav>
@@ -124,13 +140,13 @@ function App() {
             </button>
           </StyledDateNav>
           <StyledInformationDisplayed>
-            {date === 'yesterday' ? (
+            {date === 'yesterday' && yesterdayData != null ? (
               <Yesterday yesterdayData={yesterdayData} />
             ) : (
               ''
             )}
-            {date === 'today' ? <Current data={currentData} /> : ''}
-            {date === 'tomorrow' ? (
+            {date === 'today' ? <Current /> : ''}
+            {date === 'tomorrow' && tomorrowData != null ? (
               <Yesterday yesterdayData={tomorrowData} />
             ) : (
               ''
@@ -141,7 +157,6 @@ function App() {
           </StyledMoreDetail>
         </div>
       )}
-      <MoreDetails />
     </StyledApp>
   );
 }
@@ -170,6 +185,12 @@ const StyledApp = styled.div`
   .active {
     opacity: 1;
     z-index: 2;
+  }
+  .detail-parent {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
   }
 `;
 
@@ -202,6 +223,7 @@ const StyledInformationDisplayed = styled.div`
   width: 100%;
 `;
 const StyledMoreDetail = styled.div`
+  padding-bottom: 60px;
   button {
     background-color: #fca426;
     padding: 8px 32px;

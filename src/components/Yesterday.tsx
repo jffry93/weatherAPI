@@ -1,25 +1,48 @@
-import { Obj } from 'reselect/es/types';
+import FC from 'react';
 import styled from 'styled-components';
+import { ForecastDay } from '../features/weather/Weather-Api-slice';
 import YesterdayDetails from './YesterdayDetails';
 
-const Yesterday = ({ yesterdayData }) => {
+interface yesterdayInterface {
+  yesterdayData: {
+    location: {
+      name: string;
+      country: string;
+    };
+    forecast: {
+      forecastday: ForecastDay[];
+    };
+  };
+}
+// interface Forecastday {
+//   day: {
+//     maxtemp_c: number;
+//     condition: {
+//       icon: string;
+//       text: string;
+//     };
+//   };
+// }
+
+const Yesterday = ({ yesterdayData }: yesterdayInterface) => {
+  // console.log(yesterdayData?.forecast.forecastDay[0].day);
   return (
     <StyledYesterday>
       <div className='current-info'>
-        <h2>{yesterdayData?.location.name}</h2>
-        <h3>{yesterdayData?.location.country}</h3>
+        <h2>{yesterdayData.location.name}</h2>
+        <h3>{yesterdayData.location.country}</h3>
         <h1 className='temperature'>
-          {yesterdayData?.forecast.forecastday[0].day.avgtemp_c} °C
+          {yesterdayData.forecast.forecastday[0].day.maxtemp_c} °C
         </h1>
         <div className='container'>
           <img
-            src={yesterdayData?.forecast.forecastday[0].day.condition.icon}
+            src={yesterdayData.forecast.forecastday[0].day.condition.icon}
             alt=''
           />
-          <h3>{yesterdayData?.forecast.forecastday[0].day.condition.text}</h3>
+          <h3>{yesterdayData.forecast.forecastday[0].day.condition.text}</h3>
         </div>
       </div>
-      <YesterdayDetails yesterdayData={yesterdayData} />
+      <YesterdayDetails detailData={yesterdayData} />
       {/* {yesterday?.map((hour) => (
         <div>
           <p>{hour.temp_c}</p>

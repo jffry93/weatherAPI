@@ -7,9 +7,9 @@ import { useFetchThreeDaysQuery } from '../features/weather/Weather-Api-slice';
 //REDUCERS
 import { toggleState } from '../features/toggle/toggle-slice';
 //ICONS
-import { MdArrowBack } from 'react-icons/md';
+import { MdKeyboardBackspace } from 'react-icons/md';
 
-const MoreDetails = ({ city }: any) => {
+const MoreDetails = () => {
   //SLICES
   const place: string = useAppSelector((state) => state.location.city);
   const twentyFourHours = useAppSelector((state) => state.hour.nextTwentyFour);
@@ -19,22 +19,26 @@ const MoreDetails = ({ city }: any) => {
   const forecasts = forecastData?.forecast.forecastday;
 
   const weekday = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
-  const dispatch: object = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const handleToggle = () => {
     dispatch(toggleState());
   };
+  interface Hour {
+    time: number;
+    temp_c: number;
+  }
 
   return (
     <StyledMoreDetails>
       <div className={`${detailsActive ? 'active' : ''} detail-container`}>
         <div className='back-button' onClick={() => handleToggle()}>
-          <MdArrowBack size={35} />
+          <MdKeyboardBackspace size={42.5} />
         </div>
         <div>
           <h4>Next 24 hours</h4>
           <div className='graph'>
-            {twentyFourHours.map((hour, i) => (
+            {twentyFourHours.map((hour: Hour, i) => (
               <div className='container' key={i}>
                 <p>{new Date(hour.time).getHours()}:00</p>
                 <p>{hour.temp_c}</p>
@@ -60,20 +64,15 @@ const MoreDetails = ({ city }: any) => {
 };
 
 const StyledMoreDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-
   width: 100%;
   max-width: 500px;
   padding: 22px;
   overflow: hidden;
 
   position: absolute;
+
   opacity: 1;
   z-index: 1;
-
   .back-button {
     margin: 12px 0 32px 0;
   }
