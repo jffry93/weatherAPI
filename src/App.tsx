@@ -25,6 +25,7 @@ import Current from './components/Current';
 import Yesterday from './components/Yesterday';
 import Navbar from './components/Navbar';
 import MoreDetails from './components/MoreDetails';
+import Graph from './components/Graph';
 //INTERFACES
 
 function App() {
@@ -82,17 +83,12 @@ function App() {
   //FIND CURRENT TIME IN ARRAY 48HOURS ARRAY
   useEffect(() => {
     const currentHour = getCurrentHour(currentDate);
+    const index = todayHours.findIndex(({ time }) => time === currentHour);
+    dispatch(handleIndex(index));
+    dispatch(handleArray(fourEightHours));
 
-    fourEightHours.forEach((el, i) => {
-      if (el.time === currentHour) {
-        dispatch(handleIndex(i));
-        console.log(el.time);
-        console.log(currentHour);
-        dispatch(handleArray(fourEightHours));
-      }
-    });
     //MUST WAIT FOR TOMORROW HOURS DATA TO RUN ON TIME
-  }, [JSON.stringify(tomorrowHours)]);
+  }, [JSON.stringify(fourEightHours)]);
 
   //SET NEXT 24 HOURS ARRAY
   useEffect(() => {
@@ -114,6 +110,7 @@ function App() {
     <StyledApp>
       <Navbar />
       {!real && <p className='invalid-address'>Enter Valid Location</p>}
+      <Graph />
       <div className='detail-parent'>
         <MoreDetails />
       </div>
