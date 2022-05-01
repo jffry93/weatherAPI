@@ -8,12 +8,15 @@ import { useFetchThreeDaysQuery } from '../features/weather/Weather-Api-slice';
 import { toggleState } from '../features/toggle/toggle-slice';
 //ICONS
 import { MdKeyboardBackspace } from 'react-icons/md';
+//GRAPH
+import Graph from './Graph';
 
 const MoreDetails = () => {
   //SLICES
   const place: string = useAppSelector((state) => state.location.city);
   const twentyFourHours = useAppSelector((state) => state.hour.nextTwentyFour);
   const detailsActive = useAppSelector((state) => state.toggle.show);
+
   //APIS
   const { data: forecastData } = useFetchThreeDaysQuery(place);
   const forecasts = forecastData?.forecast.forecastday;
@@ -42,6 +45,7 @@ const MoreDetails = () => {
           </div>
         </div>
         <h4 className='three-days-title'>Next 3 days</h4>
+        {detailsActive && <Graph />}
         <div className='three-days'>
           {forecasts?.map((forecast, i) => (
             <div className='forecast' key={i}>

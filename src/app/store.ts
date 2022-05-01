@@ -7,6 +7,7 @@ import { apiSlice } from '../features/weather/Weather-Api-slice';
 import dateReducer from '../features/date/date-slice';
 import hourReducer from '../features/date/hour-slice';
 import toggleReducer from '../features/toggle/toggle-slice';
+import nextTwentyFourSlice from '../features/date/next-hours-slice';
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
     date: dateReducer,
     hour: hourReducer,
     toggle: toggleReducer,
+    nextHours: nextTwentyFourSlice,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat(apiSlice.middleware);

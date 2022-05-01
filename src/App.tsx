@@ -10,13 +10,17 @@ import {
   handleTwentyFour,
 } from './features/date/hour-slice';
 import { toggleState } from './features/toggle/toggle-slice';
+import {
+  handleFormat,
+  handleValues,
+  handleVictory,
+} from './features/date/next-hours-slice';
 //WEATHER API
 import {
   useFetchCurrentQuery,
   useFetchYesterdayQuery,
   useFetchTodayQuery,
   useFetchTomorrowQuery,
-  ForecastDay,
 } from './features/weather/Weather-Api-slice';
 //STYLING
 import './App.css';
@@ -25,7 +29,7 @@ import Current from './components/Current';
 import Yesterday from './components/Yesterday';
 import Navbar from './components/Navbar';
 import MoreDetails from './components/MoreDetails';
-import Graph from './components/Graph';
+
 //INTERFACES
 
 function App() {
@@ -39,6 +43,7 @@ function App() {
   const date: string = useAppSelector((state) => state.date.date);
   const twoDayArray = useAppSelector((state) => state.hour.updatedArray);
   const toggle: boolean = useAppSelector((state) => state.toggle.show);
+  const twentyFourHours = useAppSelector((state) => state.hour.nextTwentyFour);
 
   //fetch API data
   const { data: currentData, error, isFetching } = useFetchCurrentQuery(place);
@@ -79,6 +84,23 @@ function App() {
 
     return `${year}-${formattedMonth}-${formattedDay} ${hour}:00`;
   };
+  useEffect(() => {
+    const victoryData = twentyFourHours.map((hour) => {
+      return { time: hour.time, temp: hour.temp_c };
+    });
+    const formatData = twentyFourHours.map((hour, i) => {
+      const hourOnly = hour.time.split(' ');
+      console.log(hourOnly[1]);
+      return hourOnly[1];
+    });
+    const valuesData = twentyFourHours.map((hour, i) => {
+      return i++ + 1;
+    });
+
+    dispatch(handleFormat(formatData));
+    dispatch(handleValues(valuesData));
+    dispatch(handleVictory(victoryData));
+  }, [twentyFourHours]);
 
   //FIND CURRENT TIME IN ARRAY 48HOURS ARRAY
   useEffect(() => {
@@ -110,7 +132,7 @@ function App() {
     <StyledApp>
       <Navbar />
       {!real && <p className='invalid-address'>Enter Valid Location</p>}
-      <Graph />
+
       <div className='detail-parent'>
         <MoreDetails />
       </div>

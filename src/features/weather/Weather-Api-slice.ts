@@ -22,7 +22,7 @@ interface Current {
   };
 }
 export interface Hour {
-  time: string | number | Date;
+  time: string;
   temp_c: number;
 }
 

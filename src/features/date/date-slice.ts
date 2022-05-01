@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FC } from 'react';
 
 interface dateState {
   date: string;
