@@ -24,11 +24,6 @@ const MoreDetails = () => {
   const handleToggle = () => {
     dispatch(toggleState());
   };
-  interface Hour {
-    time: number;
-    temp_c: number;
-  }
-
   return (
     <StyledMoreDetails>
       <div className={`${detailsActive ? 'active' : ''} detail-container`}>
@@ -38,7 +33,7 @@ const MoreDetails = () => {
         <div>
           <h4>Next 24 hours</h4>
           <div className='graph'>
-            {twentyFourHours.map((hour: Hour, i) => (
+            {twentyFourHours.map((hour, i) => (
               <div className='container' key={i}>
                 <p>{new Date(hour.time).getHours()}:00</p>
                 <p>{hour.temp_c}</p>
