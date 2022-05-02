@@ -81,31 +81,16 @@ function App() {
     let formattedMonth = ('0' + month).slice(-2);
     let year = date.getFullYear();
     let hour = date.getHours();
+    let formattedHour = ('0' + hour).slice(-2);
 
-    return `${year}-${formattedMonth}-${formattedDay} ${hour}:00`;
+    return `${year}-${formattedMonth}-${formattedDay} ${formattedHour}:00`;
   };
-  useEffect(() => {
-    const victoryData = twentyFourHours.map((hour) => {
-      return { time: hour.time, temp: hour.temp_c };
-    });
-    const formatData = twentyFourHours.map((hour, i) => {
-      const hourOnly = hour.time.split(' ');
-      console.log(hourOnly[1]);
-      return hourOnly[1];
-    });
-    const valuesData = twentyFourHours.map((hour, i) => {
-      return i++ + 1;
-    });
-
-    dispatch(handleFormat(formatData));
-    dispatch(handleValues(valuesData));
-    dispatch(handleVictory(victoryData));
-  }, [twentyFourHours]);
 
   //FIND CURRENT TIME IN ARRAY 48HOURS ARRAY
   useEffect(() => {
     const currentHour = getCurrentHour(currentDate);
     const index = todayHours.findIndex(({ time }) => time === currentHour);
+
     dispatch(handleIndex(index));
     dispatch(handleArray(fourEightHours));
 
@@ -118,6 +103,24 @@ function App() {
     dispatch(handleTwentyFour(reducerCopy));
   }, [JSON.stringify(twoDayArray)]); //RUNS EVERYTIME THE LOCATION CHANGES
 
+  //SET STATE FOR GRAPH STATE
+  useEffect(() => {
+    const victoryData = twentyFourHours.map((hour) => {
+      return { time: hour.time, temp: hour.temp_c };
+    });
+    const formatData = twentyFourHours.map((hour, i) => {
+      const hourOnly = hour.time.split(' ');
+      // console.log(hourOnly[1]);
+      return hourOnly[1];
+    });
+    const valuesData = twentyFourHours.map((hour, i) => {
+      return i++ + 1;
+    });
+
+    dispatch(handleFormat(formatData));
+    dispatch(handleValues(valuesData));
+    dispatch(handleVictory(victoryData));
+  }, [twentyFourHours]);
   //CONDITIONAL RENDERS FOR DIFFERENT DAYS
   const handleClick = (string: string) => {
     dispatch(handleDate(string));
