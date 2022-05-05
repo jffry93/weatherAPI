@@ -19,13 +19,21 @@ const Graph = () => {
   const victoryTickValues = useAppSelector((state) => state.nextHours.value);
   const victoryTickData = useAppSelector((state) => state.nextHours.victory);
 
+  const test1 = Object.entries(victoryTickData);
+
+  const victoryTemp = test1.map((test) => test[1].temp);
+
+  const test = Object.assign({}, victoryTemp);
+  console.log(test);
+  const test2 = Object.values(test);
+
   useEffect(() => {
     const victoryData = twentyFourHours.map((hour) => {
       return { time: hour.time, temp: hour.temp_c };
     });
     const formatData = twentyFourHours.map((hour) => {
       const hourOnly = hour.time.split(' ');
-      console.log(hourOnly[1]);
+      // console.log(hourOnly[1]);
       return hourOnly[1];
     });
     const valuesData = twentyFourHours.map((_, i) => {
@@ -38,8 +46,21 @@ const Graph = () => {
   }, [twentyFourHours]);
 
   return (
-    <div>
+    <StyledGraph>
       <VictoryChart
+        // horizontal
+        style={{
+          parent: {
+            width: 'unset',
+            // border: '1px solid #ccc',
+          },
+
+          background: {
+            fill: '#282c34',
+          },
+        }}
+        height={500}
+        width={1000}
         theme={VictoryTheme.material}
         domainPadding={20}
         animate={{
@@ -56,12 +77,30 @@ const Graph = () => {
         <VictoryAxis
           dependentAxis
           // tickFormat specifies how ticks should be displayed
-          tickFormat={(x) => `$${x / 1000}k`}
+          tickFormat={(x) => `${x}°C`}
         />
-        <VictoryBar data={victoryTickData} x='time' y='temp' />
+        <VictoryBar
+          style={{
+            data: { fill: '#fff' },
+          }}
+          data={victoryTickData}
+          x='time'
+          y='temp'
+        />
       </VictoryChart>
-    </div>
+    </StyledGraph>
   );
 };
+
+const StyledGraph = styled.div`
+  overflow-x: scroll;
+  * {
+    &:first-child {
+      svg {
+        width: unset !important;
+      }
+    }
+  }
+`;
 
 export default Graph;

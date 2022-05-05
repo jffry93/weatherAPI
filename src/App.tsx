@@ -1,4 +1,4 @@
-import React, { useState, useEffect, SetStateAction, FC } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 //STYLING
 import styled from 'styled-components';
@@ -29,10 +29,18 @@ import Current from './components/Current';
 import Yesterday from './components/Yesterday';
 import Navbar from './components/Navbar';
 import MoreDetails from './components/MoreDetails';
+import { BenType } from './components/BenType';
 
 //INTERFACES
 
 function App() {
+  //TYPESCRIPT PRACTICE
+  const [number, setNumber] = useState('');
+
+  const changeNumber = () => {
+    setNumber('10');
+  };
+
   //REDUX
   const dispatch = useAppDispatch();
 
@@ -129,6 +137,9 @@ function App() {
   //DISPLAY MORE DETAILS
   const handleToggle = () => {
     dispatch(toggleState());
+  };
+  const handleChange = () => {
+    console.log('foo');
   };
 
   return (

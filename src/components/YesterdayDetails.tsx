@@ -25,7 +25,7 @@ interface yesterdayInterface {
 // }
 
 const YesterdayDetails = ({ detailData }: yesterdayInterface): JSX.Element => {
-  console.log(detailData);
+  // console.log(detailData);
   return (
     <StyledCurrentDetails>
       <h4>Details</h4>

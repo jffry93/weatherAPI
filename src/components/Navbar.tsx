@@ -11,6 +11,7 @@ const Navbar = () => {
   const updateCity = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    // console.log(formData);
     const [_, location] = formData.entries().next().value;
     dispatch(selectedCity(location));
   };

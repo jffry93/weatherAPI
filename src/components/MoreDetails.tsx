@@ -35,17 +35,19 @@ const MoreDetails = () => {
         </div>
         <div>
           <h4>Next 24 hours</h4>
-          <div className='graph'>
+          {detailsActive && <Graph />}
+          {/* <div className='graph'>
+            
             {twentyFourHours.map((hour, i) => (
               <div className='container' key={i}>
                 <p>{new Date(hour.time).getHours()}:00</p>
                 <p>{hour.temp_c}</p>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
         <h4 className='three-days-title'>Next 3 days</h4>
-        {detailsActive && <Graph />}
+
         <div className='three-days'>
           {forecasts?.map((forecast, i) => (
             <div className='forecast' key={i}>
