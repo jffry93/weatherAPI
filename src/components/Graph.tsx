@@ -19,13 +19,10 @@ const Graph = () => {
   const victoryTickValues = useAppSelector((state) => state.nextHours.value);
   const victoryTickData = useAppSelector((state) => state.nextHours.victory);
 
+  const test = Object.values(victoryTickData);
   const test1 = Object.entries(victoryTickData);
 
   const victoryTemp = test1.map((test) => test[1].temp);
-
-  const test = Object.assign({}, victoryTemp);
-  console.log(test);
-  const test2 = Object.values(test);
 
   useEffect(() => {
     const victoryData = twentyFourHours.map((hour) => {
@@ -60,9 +57,9 @@ const Graph = () => {
           },
         }}
         height={500}
-        width={1000}
+        width={1400}
         theme={VictoryTheme.material}
-        domainPadding={20}
+        domainPadding={16}
         animate={{
           duration: 1000,
           onLoad: { duration: 100 },
@@ -73,16 +70,31 @@ const Graph = () => {
           // they are placed on the axis
           tickValues={victoryTickValues}
           tickFormat={victoryTickFormat}
+          style={{
+            grid: { stroke: '#282c34' },
+            tickLabels: {
+              fontSize: 17,
+              fill: 'white',
+            },
+          }}
         />
         <VictoryAxis
           dependentAxis
           // tickFormat specifies how ticks should be displayed
           tickFormat={(x) => `${x}°C`}
+          style={{
+            grid: { stroke: '#282c34' },
+            tickLabels: { fontSize: 15, fill: 'white' },
+          }}
         />
         <VictoryBar
+          barRatio={0.6}
           style={{
-            data: { fill: '#fff' },
+            data: { fill: '#fca426' },
+            labels: { fontSize: 17, fill: 'white' },
           }}
+          alignment='middle'
+          labels={victoryTemp}
           data={victoryTickData}
           x='time'
           y='temp'
