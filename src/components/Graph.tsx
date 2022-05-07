@@ -1,6 +1,12 @@
 // import * as V from 'victory';
 import { useEffect } from 'react';
-import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme } from 'victory';
+import {
+  VictoryBar,
+  VictoryChart,
+  VictoryAxis,
+  VictoryTheme,
+  VictoryArea,
+} from 'victory';
 import styled from 'styled-components';
 //API SLICES
 import { useAppSelector, useAppDispatch } from '../app/hooks';
@@ -22,7 +28,7 @@ const Graph = () => {
   const test = Object.values(victoryTickData);
   const test1 = Object.entries(victoryTickData);
 
-  const victoryTemp = test1.map((test) => test[1].temp);
+  const victoryTemp = test1.map((test) => `${test[1].temp}°C`);
 
   useEffect(() => {
     const victoryData = twentyFourHours.map((hour) => {
@@ -56,7 +62,7 @@ const Graph = () => {
             fill: '#282c34',
           },
         }}
-        height={500}
+        height={400}
         width={1400}
         theme={VictoryTheme.material}
         domainPadding={16}
@@ -73,7 +79,7 @@ const Graph = () => {
           style={{
             grid: { stroke: '#282c34' },
             tickLabels: {
-              fontSize: 17,
+              fontSize: 13,
               fill: 'white',
             },
           }}
@@ -84,14 +90,15 @@ const Graph = () => {
           tickFormat={(x) => `${x}°C`}
           style={{
             grid: { stroke: '#282c34' },
-            tickLabels: { fontSize: 15, fill: 'white' },
+            tickLabels: { fontSize: 13, fill: 'white' },
           }}
         />
         <VictoryBar
+          // interpolation='natural'
           barRatio={0.6}
           style={{
             data: { fill: '#fca426' },
-            labels: { fontSize: 17, fill: 'white' },
+            labels: { fontSize: 13, fill: 'white' },
           }}
           alignment='middle'
           labels={victoryTemp}
@@ -106,6 +113,7 @@ const Graph = () => {
 
 const StyledGraph = styled.div`
   overflow-x: scroll;
+  overflow-y: hidden;
   * {
     &:first-child {
       svg {

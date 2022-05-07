@@ -10,6 +10,7 @@ import { toggleState } from '../features/toggle/toggle-slice';
 import { MdKeyboardBackspace } from 'react-icons/md';
 //GRAPH
 import Graph from './Graph';
+import ThreeDays from './ThreeDays';
 
 const MoreDetails = () => {
   //SLICES
@@ -47,17 +48,16 @@ const MoreDetails = () => {
           </div> */}
         </div>
         <h4 className='three-days-title'>Next 3 days</h4>
-
-        <div className='three-days'>
-          {forecasts?.map((forecast, i) => (
-            <div className='forecast' key={i}>
-              <div className='text-icon'>
+        <div className='three-days-container'>
+          <div className='three-days'>
+            {forecasts?.map((forecast, i) => (
+              <div className='forecast' key={i}>
                 <p>{weekday[new Date(forecast.date).getDay()]}</p>
                 <img src={forecast.day.condition.icon}></img>
               </div>
-              <h4>{forecast.day.maxtemp_c}</h4>
-            </div>
-          ))}
+            ))}
+          </div>
+          <ThreeDays />
         </div>
       </div>
     </StyledMoreDetails>
@@ -109,7 +109,19 @@ const StyledMoreDetails = styled.div`
       border: 1px solid red;
     }
   }
-  .three-days-title {
+  .three-days-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .three-days {
+      .forecast {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+    }
+  }
+  /* .three-days-title {
     margin-top: 8px;
   }
   .three-days {
@@ -132,7 +144,7 @@ const StyledMoreDetails = styled.div`
         }
       }
     }
-  }
+  } */
 `;
 
 export default MoreDetails;
