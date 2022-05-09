@@ -5,7 +5,7 @@ interface toggleState {
 }
 
 const initialState: toggleState = {
-  show: true,
+  show: false,
 };
 
 const toggleSlice = createSlice({

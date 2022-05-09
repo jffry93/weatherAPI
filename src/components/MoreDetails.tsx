@@ -28,11 +28,23 @@ const MoreDetails = () => {
   const handleToggle = () => {
     dispatch(toggleState());
   };
+  useEffect(() => {
+    window.scroll({
+      top: 0,
+      left: 0,
+    });
+    // console.log(window);
+  }, [detailsActive]);
+
   return (
     <StyledMoreDetails>
       <div className={`${detailsActive ? 'active' : ''} detail-container`}>
-        <div className='back-button' onClick={() => handleToggle()}>
-          <MdKeyboardBackspace size={42.5} />
+        <div>
+          <MdKeyboardBackspace
+            className='back-button'
+            size={42.5}
+            onClick={() => handleToggle()}
+          />
         </div>
         <div>
           <h4>Next 24 hours</h4>
@@ -76,6 +88,13 @@ const StyledMoreDetails = styled.div`
   z-index: 1;
   .back-button {
     margin: 12px 0 32px 0;
+    cursor: pointer;
+  }
+  .back-button:hover {
+    transform: scale(1.05);
+  }
+  .back-button:active {
+    transform: scale(1);
   }
   .detail-container {
     position: relative;
@@ -94,8 +113,6 @@ const StyledMoreDetails = styled.div`
   .graph {
     display: flex;
     gap: 16px;
-
-    overflow-x: scroll;
     width: 100%;
     max-width: 500px;
     padding: 32px 0 24px;
@@ -109,6 +126,9 @@ const StyledMoreDetails = styled.div`
       border: 1px solid red;
     }
   }
+  .three-days-title {
+    margin-top: 8px;
+  }
   .three-days-container {
     display: flex;
     align-items: center;
@@ -120,11 +140,19 @@ const StyledMoreDetails = styled.div`
       left: 0;
       background-color: #282c34;
       z-index: 1;
+
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 0 5px 0 0;
       .forecast {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 8px;
+        img {
+          width: 50px;
+        }
       }
     }
   }

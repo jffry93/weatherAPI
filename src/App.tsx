@@ -29,7 +29,6 @@ import Current from './components/Current';
 import Yesterday from './components/Yesterday';
 import Navbar from './components/Navbar';
 import MoreDetails from './components/MoreDetails';
-import { BenType } from './components/BenType';
 
 //INTERFACES
 
@@ -138,57 +137,64 @@ function App() {
   const handleToggle = () => {
     dispatch(toggleState());
   };
-  const handleChange = () => {
-    console.log('foo');
-  };
 
+  useEffect(() => {
+    window.scroll({
+      top: 0,
+      left: 0,
+    });
+    // console.log(window);
+  }, [real]);
   return (
     <StyledApp>
       <Navbar />
       {!real && <p className='invalid-address'>Enter Valid Location</p>}
-
-      <div className='detail-parent'>
-        <MoreDetails />
-      </div>
-      {currentData && (
-        <div className={`${toggle ? '' : 'active'} current-details`}>
-          <StyledDateNav>
-            <button
-              onClick={() => handleClick('yesterday')}
-              className={date === 'yesterday' ? 'active' : ''}
-            >
-              Yesterday
-            </button>
-            <button
-              onClick={() => handleClick('today')}
-              className={date === 'today' ? 'active' : ''}
-            >
-              Today
-            </button>
-            <button
-              onClick={() => handleClick('tomorrow')}
-              className={date === 'tomorrow' ? 'active' : ''}
-            >
-              Tomorrow
-            </button>
-          </StyledDateNav>
-          <StyledInformationDisplayed>
-            {date === 'yesterday' && yesterdayData != null ? (
-              <Yesterday yesterdayData={yesterdayData} />
-            ) : (
-              ''
-            )}
-            {date === 'today' ? <Current /> : ''}
-            {date === 'tomorrow' && tomorrowData != null ? (
-              <Yesterday yesterdayData={tomorrowData} />
-            ) : (
-              ''
-            )}
-          </StyledInformationDisplayed>
-          <StyledMoreDetail onClick={() => handleToggle()}>
-            <button>More Details</button>
-          </StyledMoreDetail>
-        </div>
+      {real && (
+        <>
+          <div className='detail-parent'>
+            <MoreDetails />
+          </div>
+          {currentData && (
+            <div className={`${toggle ? '' : 'active'} current-details`}>
+              <StyledDateNav>
+                <button
+                  onClick={() => handleClick('yesterday')}
+                  className={date === 'yesterday' ? 'active' : ''}
+                >
+                  Yesterday
+                </button>
+                <button
+                  onClick={() => handleClick('today')}
+                  className={date === 'today' ? 'active' : ''}
+                >
+                  Today
+                </button>
+                <button
+                  onClick={() => handleClick('tomorrow')}
+                  className={date === 'tomorrow' ? 'active' : ''}
+                >
+                  Tomorrow
+                </button>
+              </StyledDateNav>
+              <StyledInformationDisplayed>
+                {date === 'yesterday' && yesterdayData != null ? (
+                  <Yesterday yesterdayData={yesterdayData} />
+                ) : (
+                  ''
+                )}
+                {date === 'today' ? <Current /> : ''}
+                {date === 'tomorrow' && tomorrowData != null ? (
+                  <Yesterday yesterdayData={tomorrowData} />
+                ) : (
+                  ''
+                )}
+              </StyledInformationDisplayed>
+              <StyledMoreDetail onClick={() => handleToggle()}>
+                <button>More Details</button>
+              </StyledMoreDetail>
+            </div>
+          )}
+        </>
       )}
     </StyledApp>
   );

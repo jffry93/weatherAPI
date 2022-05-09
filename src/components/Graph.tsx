@@ -79,12 +79,13 @@ const Graph = () => {
             },
           }}
           height={300}
-          width={1400}
+          width={1800}
           theme={VictoryTheme.material}
           // domainPadding={16}
           animate={{
             duration: 1000,
             onLoad: { duration: 100 },
+            // easing: 'bounce',
           }}
         >
           <VictoryAxis
@@ -100,6 +101,11 @@ const Graph = () => {
             }}
           />
           <VictoryArea
+            animate={{
+              duration: 1000,
+              onLoad: { duration: 100 },
+              // easing: 'bounce',
+            }}
             interpolation='natural'
             // barRatio={0.6}
             style={{
@@ -152,13 +158,18 @@ const Graph = () => {
 const StyledGraph = styled.div`
   overflow-x: scroll;
   overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  .VictoryContainer {
+    user-select: auto !important;
+    pointer-events: auto !important;
+    touch-action: auto !important;
+  }
+
   * {
     &:first-child {
       svg {
         width: unset !important;
-        text {
-          padding-bottom: 30px;
-        }
+        max-width: 1500px;
       }
     }
   }

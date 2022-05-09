@@ -29,7 +29,7 @@ const ThreeDays = () => {
       </svg>
       <StyledThreeDays>
         <VictoryBar
-          barRatio={0.5}
+          barRatio={0.35}
           style={{
             data: { fill: 'url(#myGradient)' },
             labels: { fontSize: 13, fill: 'white' },
@@ -41,7 +41,7 @@ const ThreeDays = () => {
           // data accessor for y values
           y='value'
           width={360}
-          height={220}
+          height={214}
           alignment='middle'
           labels={label}
         />
@@ -55,8 +55,12 @@ const StyledThreeDays = styled.div`
 
   .VictoryContainer {
     overflow: hidden;
+    user-select: auto !important;
+    pointer-events: auto !important;
+    touch-action: auto !important;
+
     svg {
-      width: 380px !important;
+      width: 400px !important;
       display: flex;
       flex-direction: row;
       align-items: flex-start;
