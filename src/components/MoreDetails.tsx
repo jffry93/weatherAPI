@@ -111,12 +111,19 @@ const StyledMoreDetails = styled.div`
   }
   .three-days-container {
     display: flex;
-    flex-direction: row;
     align-items: center;
+    justify-content: flex-end;
+
+    overflow: hidden;
     .three-days {
+      position: absolute;
+      left: 0;
+      background-color: #282c34;
+      z-index: 1;
       .forecast {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: 8px;
       }
     }

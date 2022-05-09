@@ -6,6 +6,7 @@ import {
   VictoryAxis,
   VictoryTheme,
   VictoryArea,
+  VictoryScatter,
 } from 'victory';
 import styled from 'styled-components';
 //API SLICES
@@ -25,10 +26,15 @@ const Graph = () => {
   const victoryTickValues = useAppSelector((state) => state.nextHours.value);
   const victoryTickData = useAppSelector((state) => state.nextHours.victory);
 
+  const scatterData = victoryTickData.map((scatter, i) => {
+    return { x: i + 1, y: scatter.temp };
+  });
+  console.log(scatterData);
+
   const test = Object.values(victoryTickData);
   const test1 = Object.entries(victoryTickData);
 
-  const victoryTemp = test1.map((test) => `${test[1].temp}°C`);
+  const victoryTemp = test1.map((test) => `${test[1].temp}°`);
 
   useEffect(() => {
     const victoryData = twentyFourHours.map((hour) => {
@@ -49,65 +55,97 @@ const Graph = () => {
   }, [twentyFourHours]);
 
   return (
-    <StyledGraph>
-      <VictoryChart
-        // horizontal
-        style={{
-          parent: {
-            width: 'unset',
-            // border: '1px solid #ccc',
-          },
+    <>
+      <svg style={{ height: 0 }}>
+        <defs>
+          <linearGradient id='Graph' x1='0%' y1='0%' x2='0%' y2='100%'>
+            <stop offset='5%' stopColor='#F06C99' />
 
-          background: {
-            fill: '#282c34',
-          },
-        }}
-        height={400}
-        width={1400}
-        theme={VictoryTheme.material}
-        domainPadding={16}
-        animate={{
-          duration: 1000,
-          onLoad: { duration: 100 },
-        }}
-      >
-        <VictoryAxis
-          // tickValues specifies both the number of ticks and where
-          // they are placed on the axis
-          tickValues={victoryTickValues}
-          tickFormat={victoryTickFormat}
+            <stop offset='98%' stopColor='#282c34' />
+          </linearGradient>
+        </defs>
+      </svg>
+      <StyledGraph>
+        <VictoryChart
+          // horizontal
           style={{
-            grid: { stroke: '#282c34' },
-            tickLabels: {
-              fontSize: 13,
-              fill: 'white',
+            parent: {
+              width: 'unset',
+              // border: '1px solid #ccc',
+            },
+
+            background: {
+              fill: '#282c34',
             },
           }}
-        />
-        <VictoryAxis
-          dependentAxis
-          // tickFormat specifies how ticks should be displayed
-          tickFormat={(x) => `${x}°C`}
-          style={{
-            grid: { stroke: '#282c34' },
-            tickLabels: { fontSize: 13, fill: 'white' },
+          height={300}
+          width={1400}
+          theme={VictoryTheme.material}
+          // domainPadding={16}
+          animate={{
+            duration: 1000,
+            onLoad: { duration: 100 },
           }}
-        />
-        <VictoryBar
-          // interpolation='natural'
-          barRatio={0.6}
-          style={{
-            data: { fill: '#fca426' },
-            labels: { fontSize: 13, fill: 'white' },
-          }}
-          alignment='middle'
-          labels={victoryTemp}
-          data={victoryTickData}
-          x='time'
-          y='temp'
-        />
-      </VictoryChart>
-    </StyledGraph>
+        >
+          <VictoryAxis
+            dependentAxis
+            offsetX={45}
+            // tickFormat specifies how ticks should be displayed
+            tickFormat={(x) => `${x}°C`}
+            style={{
+              grid: { stroke: '#282c34' },
+              tickLabels: { fontSize: 13, fill: 'white' },
+              axis: { stroke: 'transparent' },
+              ticks: { stroke: 'transparent' },
+            }}
+          />
+          <VictoryArea
+            interpolation='natural'
+            // barRatio={0.6}
+            style={{
+              data: { fill: 'url(#Graph)' },
+              labels: { fontSize: 11, fill: 'white' },
+            }}
+            // alignment='middle'
+
+            data={victoryTickData}
+            x='time'
+            y='temp'
+          />
+
+          <VictoryAxis
+            // tickValues specifies both the number of ticks and where
+            // they are placed on the axis
+            tickValues={victoryTickValues}
+            tickFormat={victoryTickFormat}
+            style={{
+              grid: {
+                stroke: '#282c34',
+                strokeDasharray: '4, 3',
+                strokeWidth: 0.9,
+              },
+              tickLabels: {
+                fontSize: 13,
+                fill: 'white',
+              },
+              axis: { stroke: 'transparent' },
+              ticks: { stroke: 'transparent' },
+            }}
+            fixLabelOverlap
+          />
+          <VictoryScatter
+            style={{
+              data: { fill: '#fff', strokeWidth: 3, stroke: '#F06C99' },
+              labels: { fontSize: 11, fill: 'white', padding: 12 },
+              border: { fill: 'white' },
+            }}
+            size={5}
+            data={scatterData}
+            labels={victoryTemp}
+          />
+        </VictoryChart>
+      </StyledGraph>
+    </>
   );
 };
 
@@ -118,6 +156,9 @@ const StyledGraph = styled.div`
     &:first-child {
       svg {
         width: unset !important;
+        text {
+          padding-bottom: 30px;
+        }
       }
     }
   }

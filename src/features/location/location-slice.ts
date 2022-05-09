@@ -5,7 +5,7 @@ interface locationState {
 }
 
 const initialState: locationState = {
-  city: 'toronto',
+  city: 'ajax',
 };
 
 const locationSlice = createSlice({

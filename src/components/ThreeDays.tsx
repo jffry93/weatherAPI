@@ -13,37 +13,60 @@ const ThreeDays = () => {
     value: day.day.avgtemp_c,
     earnings: i + 1,
   }));
-  console.log(forecastDay);
-  const label = forecastDay?.map((day) => `${day.value}°C`);
-  console.log(label);
+
+  const label = forecastDay?.map((day) => `${day.value}°`);
 
   return (
-    <StyledThreeDays>
-      <VictoryBar
-        barRatio={0.5}
-        style={{
-          data: { fill: '#fca426' },
-          labels: { fontSize: 20, fill: 'white' },
-        }}
-        horizontal
-        data={forecastDay}
-        // data accessor for x values
-        x='earnings'
-        // data accessor for y values
-        y='value'
-        width={400}
-        height={250}
-        alignment='middle'
-        labels={label}
-      />
-    </StyledThreeDays>
+    <>
+      <svg style={{ height: 0 }}>
+        <defs>
+          <linearGradient id='myGradient' x1='0%' y1='0%' x2='100%' y2='0%'>
+            <stop offset='0%' stopColor='#fca426' />
+            <stop offset='92%' stopColor='#2d313a' />
+            <stop offset='100%' stopColor='#282c34' />
+          </linearGradient>
+        </defs>
+      </svg>
+      <StyledThreeDays>
+        <VictoryBar
+          barRatio={0.5}
+          style={{
+            data: { fill: 'url(#myGradient)' },
+            labels: { fontSize: 13, fill: 'white' },
+          }}
+          horizontal
+          data={forecastDay}
+          // data accessor for x values
+          x='earnings'
+          // data accessor for y values
+          y='value'
+          width={360}
+          height={220}
+          alignment='middle'
+          labels={label}
+        />
+      </StyledThreeDays>
+    </>
   );
 };
 
 const StyledThreeDays = styled.div`
   /* display: none; */
-  display: flex;
-  flex-direction: column;
+
+  .VictoryContainer {
+    overflow: hidden;
+    svg {
+      width: 380px !important;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+    :first-child {
+      position: relative;
+      right: 20px;
+    }
+  }
 `;
 
 export default ThreeDays;
